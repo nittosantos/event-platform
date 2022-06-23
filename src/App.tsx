@@ -1,10 +1,28 @@
+import { gql, useQuery } from "@apollo/client";
+
+const GET_LESSONS_QUERY = gql`
+  query {
+    lessons {
+      id
+      title
+    }
+  }
+`;
+
+interface Lesson {
+  id: string;
+  title: string;
+}
+
 function App() {
+  const { data } = useQuery<{ lessons: Lesson[] }>(GET_LESSONS_QUERY);
+
   return (
-    <h1 className="p-4">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero expedita
-      in sint porro. Vero natus odio rem cumque tempore fuga harum, excepturi
-      voluptates nesciunt assumenda et nihil animi iure nisi.
-    </h1>
+    <ul>
+      {data?.lessons.map((lesson) => (
+        <li key={lesson.id}>{lesson.title}</li>
+      ))}
+    </ul>
   );
 }
 
