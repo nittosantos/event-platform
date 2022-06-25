@@ -1,5 +1,5 @@
 export interface GetLessonsQueryResponse {
-  lessons: {
+  lesson: {
     id: string;
     title: string;
     slug: string;
