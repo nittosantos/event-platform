@@ -6,35 +6,19 @@ import {
   Lightning,
 } from "phosphor-react";
 
-import { GetLessonBySlugResponse, VideoProps } from "./types";
-import { gql, useQuery } from "@apollo/client";
+import { VideoProps } from "./types";
 import "@vime/core/themes/default.css";
-import { GetLessonsQueryResponse } from "../Sidebar/types";
 import ReactLoading from "react-loading";
-
-const GET_LESSON_BY_SLUG_QUERY = gql`
-  query GetLessonBySlug($slug: String) {
-    lesson(where: { slug: $slug }) {
-      title
-      id
-      description
-      teacher {
-        name
-        bio
-        avatarURL
-      }
-    }
-  }
-`;
+import { useGetLessonBySlugQuery } from "../../graphql/generated";
 
 export const Video: React.FC<VideoProps> = (props) => {
-  const { data } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, {
+  const { data } = useGetLessonBySlugQuery({
     variables: {
       slug: props.lessonSlug,
     },
   });
 
-  if (!data) {
+  if (!data || !data.lesson) {
     return (
       <div className=" flex flex-1 items-center justify-center">
         <ReactLoading type="spin" color="#451cd8" />
@@ -56,21 +40,24 @@ export const Video: React.FC<VideoProps> = (props) => {
           <div className="flex-1">
             <h1 className="text-2xl font-bold">{data.lesson.title}</h1>
             <p className="mt-4 text-gray-200 lea">{data.lesson.description}</p>
-            <div className="flex items-center gap-4 mt-6">
-              <img
-                src={data.lesson.teacher.avatarURL}
-                alt="Foto de perfil"
-                className="h-16 w-16 rounded-full border-2 border-blue-500"
-              />
-              <div className="leading-relaxed">
-                <strong className="block text-2xl font-bold">
-                  {data.lesson.teacher.name}
-                </strong>
-                <span className="text-gray-200 text-sm block">
-                  {data.lesson.teacher.bio}
-                </span>
+
+            {data.lesson.teacher && (
+              <div className="flex items-center gap-4 mt-6">
+                <img
+                  src={data.lesson.teacher.avatarURL}
+                  alt="Foto de perfil"
+                  className="h-16 w-16 rounded-full border-2 border-blue-500"
+                />
+                <div className="leading-relaxed">
+                  <strong className="block text-2xl font-bold">
+                    {data.lesson.teacher.name}
+                  </strong>
+                  <span className="text-gray-200 text-sm block">
+                    {data.lesson.teacher.bio}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div className="flex flex-col gap-4 leading-relaxed">
             <a
