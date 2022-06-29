@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="igniteLab" title="IgniteLab" src="src\img\Logo.svg"/>
+    Ignite Lab
 </h1>
 
 <p align="center">
@@ -9,10 +9,6 @@
 </p>
 
 <br>
-
-<p align="center">
-  <img alt="Happy" src="src\img\igniteLab-home.PNG" width="100%">
-</p>
 
 ## 🚀 Tecnologias
 
